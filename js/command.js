@@ -1,7 +1,7 @@
 let commands = {
     'move': [
         'run',
-        'stay',
+        'stop',
         'turn',
         'jump'
     ],
@@ -21,7 +21,7 @@ let commands = {
 class CMD 
 {
     constructor () {
-        this._regex = /^[a-zA-Z]$/;
+        this._regex = /^[a-zA-Z]+$/;
         this._command = '';
         this._cmd_len_limit = 36;
         this._callbacks = {};
@@ -104,7 +104,7 @@ class CMD
             
             let new_cmd = `${this._command}${new_symbol}`;
 
-            if (!this._regex.test(new_symbol))
+            if (!this._regex.test(new_cmd))
                 throw new Error(`incorrect symbol ${new_symbol}`);
             else
                 this._command += new_symbol;
