@@ -1,6 +1,6 @@
 let game;
 let cmd;
-let player;
+let states = {};
 
 function init() {
 	const config = {
@@ -9,17 +9,14 @@ function init() {
 		renderer: Phaser.AUTO,
 		parent: 'game',
 		antialias: true,
-		multiTexture: true,
-		state: {
-			preload: preload,
-			create: create,
-			update: update,
-			render: render
-		}
-		//,transparent: true
+		multiTexture: true
 	};
 	game = new Phaser.Game(config);
 	cmd = new CMD();
+  	for (let s in states) {
+		game.state.add(s, states[s]);
+	}
+	game.state.start('preload');
 }
 
 function preload() {}
