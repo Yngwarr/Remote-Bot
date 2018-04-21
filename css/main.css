@@ -1,0 +1,71 @@
+	/* http://meyerweb.com/eric/tools/css/reset/ v2.0b1 | 201101 */
+	html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; font: inherit; vertical-align: baseline; } /* HTML5 display-role reset for older browsers */ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; } body { line-height: 1; } ol, ul { list-style: none; } blockquote, q { quotes: none; } blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; } /* remember to define visible focus styles!  :focus { outline: ?????; } */ /* remember to highlight inserts somehow! */ ins { text-decoration: none; } del { text-decoration: line-through; } table { border-collapse: collapse; border-spacing: 0; }
+
+/*@font-face {
+	font-family: Frijole;
+	src: url('../fonts/Frijole-Regular.ttf');
+}
+
+@font-face {
+	font-family: CevicheOne;
+	src: url('../fonts/CevicheOne-Regular.ttf');
+}*/
+
+html {
+	font-size: 10px;
+}
+
+body {
+	/*background: #121212;*/
+	background: #666;
+}
+
+canvas {
+	/*-webkit-box-shadow: 16px 16px 32px 0px rgba(0,0,0,0.8);*/
+	/*-moz-box-shadow: 16px 16px 32px 0px rgba(0,0,0,0.8);*/
+}
+
+.hidden {
+	display: none;
+}
+
+.centered {
+	text-align: center;
+}
+
+#wrapper {
+	/*width: 95vw;*/
+	/*padding: 2.5vw;*/
+	width: 100vw;
+	height: 100vh;
+}
+
+#wrapper * {
+	user-select: none;
+}
+
+#game {
+	width: 768px;
+	/*margin: 0 auto;*/
+	box-shadow: 16px 16px 32px 0px rgba(0,0,0,0.8);
+}
+
+.over {
+	/*width: 100%;
+	height: 100%;*/
+	/* set to canvas size */
+	width: 768px;
+	height: 576px;
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	color: #fff;
+}
+
+.over * {
+	/*color: #fff;*/
+	/*font-size: 3rem;*/
+	/*position: relative;*/
+	/*top: 0;*/
+	/*left: 0;*/
+}

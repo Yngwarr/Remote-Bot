@@ -1,0 +1,14 @@
+{
+	"libs": [
+		"browser"
+	],
+	"loadEagerly": [
+		"./js/phaser.min.js"
+	],
+	"plugins": {
+		"requirejs": {
+			"baseURL": "./",
+			"paths": {}
+		}
+	}
+}
