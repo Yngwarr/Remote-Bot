@@ -1,4 +1,6 @@
 let game;
+let cmd;
+let player;
 
 function init() {
 	const config = {
@@ -17,6 +19,7 @@ function init() {
 		//,transparent: true
 	};
 	game = new Phaser.Game(config);
+	cmd = new CMD();
 }
 
 function preload() {}
@@ -24,7 +27,9 @@ function preload() {}
 function create() {
 	// I need right click for gameplay this time
 	document.querySelector('canvas').oncontextmenu
-		= function() { return false; };
+		= function() { return false; }; 
+	//Binding input commands and executing by player
+	init_input(game, cmd, player);
 	// TODO arguable
 	game.world.setBounds(0, 0, 800, 600);
 
