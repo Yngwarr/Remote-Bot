@@ -48,19 +48,6 @@ states['game'] = {
 }
 
 function populate(map, layer) {
-	let anim_door = (sp) => {
-		sp.animations.add('closed', [0], 30, true);
-		sp.animations.add('open', [1,2,3,4,5,6,7], 30).onComplete
-			.add(function () {
-				this.animations.play('idle');
-			}, sp);
-		sp.animations.add('idle', [7], 30, true);
-		sp.animations.play('closed');
-	};
-	let anim_card = (sp) => {
-		sp.animations.add('idle', [0,1,2,3,4,3,2,1], 30, true);
-		sp.animations.play('idle');
-	};
 	/* set collidable tiles */
 	map.setCollisionBetween(1,2);
 	map.setCollisionBetween(5,6);
@@ -82,6 +69,19 @@ function populate(map, layer) {
 	map.createFromTiles(17, 0, 'door_g', layer, obj['door_g']);
 	map.createFromTiles(18, 0, 'door_b', layer, obj['door_b']);
 	/* add sprite animations */
+	let anim_door = (sp) => {
+		sp.animations.add('closed', [0], 30, true);
+		sp.animations.add('open', [1,2,3,4,5,6,7], 30).onComplete
+			.add(function () {
+				this.animations.play('idle');
+			}, sp);
+		sp.animations.add('idle', [7], 30, true);
+		sp.animations.play('closed');
+	};
+	let anim_card = (sp) => {
+		sp.animations.add('idle', [0,1,2,3,4,3,2,1], 30, true);
+		sp.animations.play('idle');
+	};
 	obj['gate'].forEach((sp) => {
 		/* TODO add a particle effect */
 		sp.animations.add('inactive', [0], 30, true);
