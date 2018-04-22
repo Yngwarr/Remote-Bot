@@ -1,6 +1,7 @@
 let map;
 let player;
 let obj = {};
+let command_label;
 
 const TILE_SIZE = 16;
 
@@ -41,10 +42,35 @@ states['game'] = {
 		player = game.add.sprite(32, 460, 'player');
 		game.physics.p2.enable(player);
 		player.body.fixedRotation = true;
+		player.cur_dirrection = 1;
+		player.is_stopped = true;
 
 		game.physics.p2.setBoundsToWorld();
+
+		//Binding input commands and executing by player
+		init_input(game, cmd, player);
+		// command title!
+		let text = game.add.text(5, game.world.height, `cmd: `, {
+			font: "18px Monospace",
+			fill: "#ccc",
+			align: "center"
+		});
+	
+		command_label = game.add.text(50, game.world.height, "", {
+			font: "18px Monospace",
+			fill: "#ccc",
+			align: "center"
+		});
+
 	},
-	update: () => {},
+	update: () => {
+		if (!player.is_stopped) {
+			if (player.cur_dirrection < 0)
+				player.body.moveLeft(100);
+			else
+				player.body.moveRight(100);
+		}
+	},
 }
 
 function populate(map, layer) {
