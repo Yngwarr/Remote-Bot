@@ -1,4 +1,3 @@
-
 function init_input(game, cmd, player) {
     // init callbacks
     // all keys in command.js
@@ -42,8 +41,18 @@ function init_input(game, cmd, player) {
     
     // input commands
     game.input.keyboard.onPressCallback = e => {
+        // input command
+        if (cmd.add_symbol(e)) {
+            //console.log('success set command');
+        } else {
+            //console.log(`error add symbol, last key = ${e}`);
+        }
+        command_label.text = cmd.get_command();
+    }
+    // delete command
+    game.input.keyboard.onDownCallback = e => {
         // if space then activate
-        if (e == ' ') {
+        if (e.code == 'Space' || e.code == 'Enter') {
             if (cmd.check_command()) {
                 if (!cmd.execute()) {}
                     //console.log('can\'t execute');
@@ -60,16 +69,6 @@ function init_input(game, cmd, player) {
             }
             cmd.clear();
         }
-        // input command
-        if (cmd.add_symbol(e)) {
-            //console.log('success set command');
-        } else {
-            //console.log(`error add symbol, last key = ${e}`);
-        }
-        command_label.text = cmd.get_command();
-    }
-    // delete command
-    game.input.keyboard.onDownCallback = e => {
         if (e.code == 'Backspace') {
             cmd.remove_last();
             //console.log(`current command ${cmd.get_command()}`);
@@ -83,4 +82,3 @@ function init_input(game, cmd, player) {
         command_label.text = cmd.get_command();
     }
 }
-

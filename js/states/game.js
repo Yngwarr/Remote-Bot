@@ -50,16 +50,16 @@ states['game'] = {
 		//Binding input commands and executing by player
 		init_input(game, cmd, player);
 		// command title!
-		let text = game.add.text(5, game.height - 23, `cmd: `, {
-			font: "18px Monospace",
-			fill: "#ccc",
-			align: "center"
+		let text = game.add.text(0, game.height - 18, '>> ', {
+			font: '16px IBM',
+			fill: '#ccc',
+			align: 'center'
 		});
 	
-		command_label = game.add.text(50, game.height - 23, "", {
-			font: "18px Monospace",
-			fill: "#ccc",
-			align: "center"
+		command_label = game.add.text(48, game.height - 18, '', {
+			font: '16px IBM',
+			fill: '#ccc',
+			align: 'center'
 		});
 
 	},
