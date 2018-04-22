@@ -55,7 +55,7 @@ function populate(map, layer) {
 	map.setCollisionBetween(16,18);
 	/* turn tiles into sprites */
 	map.createFromTiles(4, 0, 'gate', layer, obj['gate']);
-	map.createFromTiles(5, 1, 'laser', layer, obj['laser']);
+	map.createFromTiles(5, 0, 'laser', layer, obj['laser']);
 	map.createFromTiles(7, 0, 'bridge', layer, obj['bridge']);
 	map.createFromTiles(8, 0, 'spring', layer, obj['spring']);
 	map.createFromTiles(9, 0, 'plate', layer, obj['plate']);
