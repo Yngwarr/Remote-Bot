@@ -42,7 +42,7 @@ states['game'] = {
 		player = game.add.sprite(32, 460, 'player');
 		game.physics.p2.enable(player);
 		player.body.fixedRotation = true;
-		player.cur_dirrection = 1;
+		player.direction = 1;
 		player.is_stopped = true;
 		player.body.clearShapes();
 		player.body.setCircle(7);
@@ -67,7 +67,7 @@ states['game'] = {
 	},
 	update: () => {
 		if (!player.is_stopped) {
-			if (player.cur_dirrection < 0)
+			if (player.direction < 0)
 				player.body.moveLeft(100);
 			else
 				player.body.moveRight(100);
