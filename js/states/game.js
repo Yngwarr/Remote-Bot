@@ -45,7 +45,7 @@ states['game'] = {
 		player.cur_dirrection = 1;
 		player.is_stopped = true;
 		player.body.clearShapes();
-		player.body.setCircle(5);
+		player.body.setCircle(7);
 
 		game.physics.p2.setBoundsToWorld();
 
