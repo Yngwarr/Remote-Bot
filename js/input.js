@@ -14,11 +14,13 @@ function init_input(game, cmd, player) {
     cmd.add_callback('turn', ()=>{
         //console.log('i am turning');
         player.cur_dirrection *= -1;
-        player.body.velocity.x = 0;
-        if (player.cur_dirrection > 0)
-            player.body.moveRight(100);
-        else
-            player.body.moveLeft(100);
+        if (player.body.velocity.x != 0) {
+            player.body.velocity.x = 0;
+            if (player.cur_dirrection > 0)
+                player.body.moveRight(100);
+            else
+                player.body.moveLeft(100);
+        }
     });
 
     cmd.add_callback('stop', ()=>{
