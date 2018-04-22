@@ -58,7 +58,10 @@ function init_input(game, cmd, player) {
             cmd.backspace();
         }
         if (e.code == 'ArrowUp') {
-			/* TODO */
+			cmd.hist_scroll();
+        }
+        if (e.code == 'ArrowDown') {
+			cmd.hist_scroll(true);
         }
         command_label.text = cmd.line;
     }

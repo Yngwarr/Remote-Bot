@@ -10,6 +10,9 @@ class CMD
         this._fs = {};
 		/* list of parametrised commands */
 		this._pd = [];
+		this._hist = [];
+		this._hist_idx = 0;
+		this._hist_limit = 8;
     }
 
 	/* adds an action for a word */
@@ -33,6 +36,7 @@ class CMD
 		}
 		if (this._put_arg) {
 			this._fs[this._cmd](this._arg);
+			this.hist_push();
 			this.clear();
 			return true;
 		}
@@ -43,6 +47,7 @@ class CMD
 			return true;
 		} 
 		this._fs[this._cmd]();
+		this.hist_push();
 		this.clear();
 		return true;
     }
@@ -54,12 +59,24 @@ class CMD
 				return;
 			}
 			this._arg = _.initial(this._arg).join('');
+			return;
 		}
 		this._cmd = _.initial(this._cmd).join('');
     }
 
 	get line() {
 		return this._put_arg ? `${this._cmd} ${this._arg}` : `${this._cmd}`;
+	}
+
+	set line(str) {
+		let [cmd, arg] = str.split(' ');
+		this._cmd = cmd;
+		if (arg) {
+			this._arg = arg;
+			this._put_arg = true;
+		} else {
+			this._arg = '';
+		}
 	}
 
     push(ch) {
@@ -72,4 +89,24 @@ class CMD
 		}
 		return true;
     }
+
+	hist_push() {
+		this._hist = _.without(this._hist, this.line);
+		if (this._hist.length >= this._hist_limit) {
+			this._hist = _.rest(this.hist);
+		}
+		this._hist.push(this.line);
+		this._hist_idx = this._hist.length;
+	}
+
+	hist_scroll(down) {
+		if (this._hist_idx <= 0 && !down) return;
+		this._hist_idx += down ? 1 : -1;
+		if (this._hist_idx >= this._hist.length) {
+			this.clear();
+			this._hist_idx = this._hist.length;
+			return;
+		}
+		this.line = this._hist[this._hist_idx];
+	}
 }
