@@ -44,6 +44,8 @@ states['game'] = {
 		player.body.fixedRotation = true;
 		player.cur_dirrection = 1;
 		player.is_stopped = true;
+		player.body.clearShapes();
+		player.body.setCircle(5);
 
 		game.physics.p2.setBoundsToWorld();
 
@@ -71,6 +73,9 @@ states['game'] = {
 				player.body.moveRight(100);
 		}
 	},
+	render: ()=> {
+		game.debug.body(player);
+	}
 }
 
 function populate(map, layer) {
