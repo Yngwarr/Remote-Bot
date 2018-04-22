@@ -1,7 +1,9 @@
-let map;
+let map, layer;
 let player;
 let obj = {};
 let command_label;
+
+let active_gate;
 
 const TILE_SIZE = 16;
 
@@ -24,7 +26,7 @@ states['game'] = {
 		obj['card_g'] = game.add.group();
 		obj['card_b'] = game.add.group();
 
-		game.physics.startSystem(Phaser.Physics.P2JS);
+		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		/* tilemap of the world */
 		map = game.add.tilemap('world', TILE_SIZE, TILE_SIZE);
@@ -33,44 +35,42 @@ states['game'] = {
 		layer = map.createLayer(0);
 		layer.resizeWorld();
 		populate(map, layer);
-
-		game.physics.p2.convertTilemap(map, layer);
-		//game.physics.p2.restitution = 0.5;
-		game.physics.p2.gravity.y = 300;
+		active_gate = obj.gate.getAt(0);
 
 		/* player */
 		player = game.add.sprite(32, 460, 'player');
-		game.physics.p2.enable(player);
+		game.physics.arcade.enable(player);
+		player.body.setSize(14,14,1,1);
+		player.body.gravity.y = 300;
+		player.body.maxVelocity.y = 500;
 		player.body.fixedRotation = true;
 		player.direction = 1;
 		player.is_stopped = true;
-		player.body.clearShapes();
-		player.body.setCircle(7);
-
-		game.physics.p2.setBoundsToWorld();
 
 		//Binding input commands and executing by player
 		init_input(game, cmd, player);
 		// command title!
 		let text = game.add.text(0, game.height - 18, '>> ', {
 			font: '16px IBM',
-			fill: '#ccc',
+			fill: '#9d9d9d',
 			align: 'center'
 		});
 	
 		command_label = game.add.text(48, game.height - 18, '', {
 			font: '16px IBM',
-			fill: '#ccc',
+			fill: '#9d9d9d',
 			align: 'center'
 		});
 
 	},
 	update: () => {
+		game.physics.arcade.collide(player, layer);
+		game.physics.arcade.overlap(player, obj['gate']);
+		
 		if (!player.is_stopped) {
-			if (player.direction < 0)
-				player.body.moveLeft(100);
-			else
-				player.body.moveRight(100);
+			player.body.velocity.x = player.direction < 0 ? -100 : 100;
+		} else {
+			player.body.velocity.x = 0;
 		}
 	},
 	render: ()=> {
@@ -114,7 +114,6 @@ function populate(map, layer) {
 		sp.animations.play('idle');
 	};
 	obj['gate'].forEach((sp) => {
-		/* TODO add a particle effect */
 		sp.animations.add('inactive', [0], 30, true);
 		sp.animations.add('activate', [0,1,2,3,4,5,6,7,6,5,4], 30).onComplete
 			.add(function () {
@@ -122,6 +121,21 @@ function populate(map, layer) {
 			}, sp);
 		sp.animations.add('active', [5,4], 5, true);
 		sp.animations.play('inactive');
+
+		game.physics.arcade.enable(sp);
+		sp.body.onOverlap = new Phaser.Signal();
+		sp.body.onOverlap.add((us, them) => {
+			if (them !== player) return;
+			if (us.animations.currentAnim.name !== 'inactive') return;
+			active_gate = us;
+			/* deactivate all the other gates */
+			obj['gate'].forEach((s, me) => {
+				if (s === me) return;
+				s.play('inactive');
+			}, false, us);
+			us.play('activate');
+			/* TODO add a particle effect */
+		});
 	}, this);
 	obj['laser'].forEach((sp) => {
 		/* TODO add more animation */
