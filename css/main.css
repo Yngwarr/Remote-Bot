@@ -44,7 +44,7 @@ canvas {
 }
 
 #game {
-	width: 768px;
+	width: 800px;
 	/*margin: 0 auto;*/
 	box-shadow: 16px 16px 32px 0px rgba(0,0,0,0.8);
 }

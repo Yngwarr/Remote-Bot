@@ -88,7 +88,7 @@ class CMD
         else
             throw new Error(`incorrect command value = ${cmd}`);
         } catch(e) {
-            console.warn(e.message);
+            //console.warn(e.message);
             return false;
         }
         return true;
@@ -110,7 +110,7 @@ class CMD
                 this._command += new_symbol;
 
         } catch(e) {
-            console.warn(e.message);
+            //console.warn(e.message);
             return false;
         }
         return true;
