@@ -1,118 +1,75 @@
-let commands = {
-    'move': [
-        'run',
-        'stop',
-        'turn',
-        'jump'
-    ],
-    'targets': [
-        'leg',
-        'head',
-        'body'
-    ],
-    'activities': [
-        'use',
-        'kick',
-        'punch'
-    ]
-};
-
-
 class CMD 
 {
     constructor () {
-        this._regex = /^[a-zA-Z]+$/;
-        this._command = '';
-        this._cmd_len_limit = 36;
-        this._callbacks = {};
+		this._regex = /^[a-zA-Z0-9]$/;
+        this._cmd = '';
+		this._arg = '';
+		/* writes to arg when true */
+		this._put_arg = false;
+        this._limit = 36;
+        this._fs = {};
+		/* list of parametrised commands */
+		this._pd = [];
     }
 
-    add_callback(key, clb) {
-        if (this._check_command(key)) {
-            this._callbacks[key] = clb;
-            return true;
-        } 
-        return false;
+	/* adds an action for a word */
+    add(key, f, param_required) {
+		this._fs[key] = f;
+		if (param_required) {
+			this._pd.push(key);
+		}
     }
 
     clear() {
-        this._command = '';
+        this._cmd = '';
+		this._arg = '';
+		this._put_arg = false;
     }
 
-    execute() {
-        if (!this.check_command())
-            return false;
-
-        for(let key in this._callbacks) {
-            if (key == this._command) {
-                this._callbacks[this._command]();
-                return true;
-            }
-        }
-
-        return false;
+    exec(strict) {
+		if (!this._fs[this._cmd]) {
+			this.clear();
+			return false;
+		}
+		if (this._put_arg) {
+			this._fs[this._cmd](this._arg);
+			this.clear();
+			return true;
+		}
+		let pd = this._pd.includes(this._cmd);
+		if (pd && strict) return false;
+		if (pd) {
+			this._put_arg = true;
+			return true;
+		} 
+		this._fs[this._cmd]();
+		this.clear();
+		return true;
     }
 
-    remove_last() {
-        if (this._command.length == 0) return false;
-        this._command = this._command.substr(0, this._command.length - 1);
-        return true;
+    backspace() {
+		if (this._put_arg) {
+			if (this._arg.length === 0) {
+				this._put_arg = false;
+				return;
+			}
+			this._arg = _.initial(this._arg).join('');
+		}
+		this._cmd = _.initial(this._cmd).join('');
     }
 
-    check_command() {
-        return this._check_command(this._command);
-    }
+	get line() {
+		return this._put_arg ? `${this._cmd} ${this._arg}` : `${this._cmd}`;
+	}
 
-    _check_command(cmd) {
-        for(let key in commands) {
-            if(commands[key].includes(cmd)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // if command exist return a command else return an empty string
-    get_command() {
-        return this._command;
-    }
-
-
-    set_command(cmd) {
-        try {
-        if (typeof(cmd) != 'string')
-            throw new Error(`incorrect command value:type ${cmd} : ${typeof(cmd)}`);
-        let new_cmd = cmd.toLowerCase();
-        if (this._regex.test(cmd))
-            this._command = cmd;
-        else
-            throw new Error(`incorrect command value = ${cmd}`);
-        } catch(e) {
-            //console.warn(e.message);
-            return false;
-        }
-        return true;
-    }
-
-    add_symbol(symbol) {
-        if (this._command.length >= this._cmd_len_limit)
-            console.log(`command full, you must delete it or execute`);
-        try {
-            if (typeof(symbol) != 'string')
-                throw new Error(`incorrect symbol value:type ${symbol} : ${typeof(symbol)}`);
-            let new_symbol = symbol.toLowerCase()[0];
-            
-            let new_cmd = `${this._command}${new_symbol}`;
-
-            if (!this._regex.test(new_cmd))
-                throw new Error(`incorrect symbol ${new_symbol}`);
-            else
-                this._command += new_symbol;
-
-        } catch(e) {
-            //console.warn(e.message);
-            return false;
-        }
-        return true;
+    push(ch) {
+		if (this.line.length + ch.length >= this._limit) return false;
+		if (!this._regex.test(ch)) return false;
+		if (this._put_arg) {
+			this._arg = this._arg.concat(ch);
+		} else {
+			this._cmd = this._cmd.concat(ch);
+		}
+		return true;
     }
 }
