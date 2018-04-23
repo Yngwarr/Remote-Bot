@@ -5,6 +5,7 @@ let obj = {};
 /* a prompt for a command line */
 let command_label;
 let grad;
+let ind;
 
 let active_gate;
 
@@ -68,17 +69,17 @@ states['game'] = {
 				sp.play('idle');
 			});
 		grad.play('idle');
-		let text = game.add.text(0, game.height - 18, '>> ', {
+		let text = game.add.text(72, game.height - 18, '>> ', {
 			font: '16px IBM',
 			fill: '#9d9d9d',
 			align: 'center'
 		});
-	
-		command_label = game.add.text(48, game.height - 18, '', {
+		command_label = game.add.text(120, game.height - 18, '', {
 			font: '16px IBM',
 			fill: '#9d9d9d',
 			align: 'center'
 		});
+		ind = new Indicator();
 	},
 	update: () => {
 		player.on_ladder[0] = player.on_ladder[1];
@@ -141,6 +142,9 @@ states['game'] = {
 		if (cmd.hold === 'up' || player.is_climbing) {
 			climb();
 		}
+
+		ind.hold = cmd.hold;
+		ind.dir = player.direction;
 	},
 	render: () => {
 		//game.debug.body(player);
@@ -169,7 +173,7 @@ function climb() {
 	player.body.gravity.y = 0;
 	player.body.velocity.y = -SPEED;
 	player.is_climbing = true;
-	holded_cmd = '';
+	cmd.hold = '';
 }
 
 function die() {
