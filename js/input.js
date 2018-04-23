@@ -1,10 +1,17 @@
 function init_input(game, cmd, player) {
     cmd.add('jump', () => {
 		if (player.body.velocity.y !== 0) return;
+		snd.jump.play();
 		player.body.velocity.y = -JUMP_HEIGHT;
     });
     cmd.add('turn', () => {
         player.direction *= -1;
+		snd.turn.play()
+		if (player.direction < 0) {
+			player.play('turn_l');
+		} else {
+			player.play('turn_r');
+		}
     });
     cmd.add('stop', () => {
         player.is_stopped = true;
