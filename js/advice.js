@@ -1,15 +1,17 @@
 class Advice {
 	constructor() {
 		this.div = document.getElementById('advice');
+		this.hdiv = document.getElementById('help');
 		/* TODO use palette, luke! */
-		this.colors = ['#f7e26b', '#eb8931', '#e06f8b', '#9d9d9d', '#44891a',
+		this.colors = ['#f7e26b', '#eb8931', '#e06f8b', '#9d9d9d', '#a3ce27',
 			'#31a2f2'];
 		this.tips = [
 			'`stop` command may be useful.',
 			'You can execute `up` beforehand, it will work when is needed.',
-			'Use command history with ↑ and ↓.',
+			'Use ↑ and ↓ to access command history.',
 			'`turn` command also works in the air.',
-			'Icons on the left bottom corner may save your time.'
+			'Icons on the left bottom corner may save your time.',
+			'Any command cancels `up` and `down`.'
 		];
 		this.order = [];
 	}
@@ -31,5 +33,9 @@ class Advice {
 		this.order.pop();
 	}
 	help() {
+		this.hdiv.classList.remove('folded');
+	}
+	hide_help() {
+		this.hdiv.classList.add('folded');
 	}
 }

@@ -32,9 +32,12 @@ function init_input(game, cmd, player) {
 	cmd.add('down', () => {
 		cmd.hold = 'down';
 	}, false, true);
-	cmd.add('do', (arg) => {
-		console.log(`doing ${arg}`);
-	}, true);
+	cmd.add('help', () => {
+		adv.help();
+	});
+	//cmd.add('do', (arg) => {
+		//console.log(`doing ${arg}`);
+	//}, true);
     
     // input commands
     game.input.keyboard.onPressCallback = e => {

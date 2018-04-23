@@ -36,6 +36,7 @@ class CMD
     }
 
     exec(strict) {
+		adv.hide_help();
 		if (!this._fs[this._cmd]) {
 			this.clear();
 			return false;
