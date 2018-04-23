@@ -10,6 +10,7 @@ states['preload'] = {
 		game.load.spritesheet('card_r', 'img/card_r.png', TILE_SIZE, TILE_SIZE);
 		game.load.spritesheet('card_g', 'img/card_g.png', TILE_SIZE, TILE_SIZE);
 		game.load.spritesheet('card_b', 'img/card_b.png', TILE_SIZE, TILE_SIZE);
+		game.load.spritesheet('grad', 'img/grad.png', 1, 24);
 		game.load.spritesheet('treasure', 'img/treasure.png',
 			TILE_SIZE, TILE_SIZE);
 		game.load.image('blank', 'img/blank.png');

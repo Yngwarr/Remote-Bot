@@ -4,6 +4,7 @@ let player;
 let obj = {};
 /* a prompt for a command line */
 let command_label;
+let grad;
 
 let active_gate;
 
@@ -42,7 +43,7 @@ states['game'] = {
 		active_gate = obj.gate.getAt(0);
 
 		/* player */
-		player = game.add.sprite(32, 460, 'player');
+		player = game.add.sprite(32, 550, 'player');
 		game.physics.arcade.enable(player);
 		//player.body.setSize(14,14,1,1);
 		// silly hack
@@ -57,7 +58,15 @@ states['game'] = {
 
 		//Binding input commands and executing by player
 		init_input(game, cmd, player);
-		// command title!
+
+		grad = game.add.sprite(0, 576, 'grad');
+		grad.width = 800;
+		grad.animations.add('idle', [0], 60, true);
+		grad.animations.add('blink', [1,2,3,4,5,6,7,6,5,4,3,2,1,0,
+			1,2,3,4,5,6,7,6,5,4,3,2,1], 60).onComplete.add((sp) => {
+				sp.play('idle');
+			});
+		grad.play('idle');
 		let text = game.add.text(0, game.height - 18, '>> ', {
 			font: '16px IBM',
 			fill: '#9d9d9d',
@@ -134,13 +143,13 @@ states['game'] = {
 		}
 	},
 	render: () => {
-		game.debug.body(player);
-		obj.spike_u.forEach((sp) => {
-			game.debug.body(sp);
-		});
-		obj.spike_l.forEach((sp) => {
-			game.debug.body(sp);
-		});
+		//game.debug.body(player);
+		//obj.spike_u.forEach((sp) => {
+			//game.debug.body(sp);
+		//});
+		//obj.spike_l.forEach((sp) => {
+			//game.debug.body(sp);
+		//});
 	}
 }
 

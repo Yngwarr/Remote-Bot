@@ -39,10 +39,10 @@ function init_input(game, cmd, player) {
     game.input.keyboard.onDownCallback = e => {
         // if space then activate
         if (e.code == 'Space') {
-			cmd.exec();
+			cmd.exec() || grad.play('blink');
         }
 		if (e.code == 'Enter') {
-			cmd.exec(true);
+			cmd.exec(true) || grad.play('blink');
 		}
         if (e.code == 'Backspace') {
             cmd.backspace();
