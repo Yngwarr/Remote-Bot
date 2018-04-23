@@ -28,6 +28,7 @@ states['game'] = {
 		obj['anomaly'] = game.add.group();
 		obj['foe'] = game.add.group();
 		obj['foe_brd'] = game.add.group();
+		obj['treasure'] = game.add.group();
 
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -83,6 +84,9 @@ states['game'] = {
 		});
 		game.physics.arcade.overlap(obj['foe'], obj['foe_brd'], (f, b) => {
 			f.body.velocity.x *= -1;
+		});
+		game.physics.arcade.overlap(player, obj['treasure'], (pl, t) => {
+			/* TODO happy end */
 		});
 		game.physics.arcade.collide(player, obj['door_r'], null, door_collide);
 		game.physics.arcade.collide(player, obj['door_g'], null, door_collide);
@@ -189,6 +193,7 @@ function populate(map, layer) {
 	map.createFromTiles(19, 0, 'blank', layer, obj['anomaly']);
 	map.createFromTiles(23, 0, 'blank', layer, obj['foe_brd']);
 	map.createFromTiles(20, 0, 'foe', layer, obj['foe']);
+	map.createFromTiles(24, 0, 'treasure', layer, obj['treasure']);
 	/* add sprite animations */
 	let anim_door = (sp) => {
 		sp.animations.add('closed', [0], 30, true);
@@ -234,6 +239,11 @@ function populate(map, layer) {
 			us.play('activate');
 			/* TODO add a particle effect */
 		});
+	}, this);
+	obj['treasure'].forEach((sp) => {
+		sp.animations.add('idle', [0,0,0,0,0,0,1], 5, true);
+		sp.animations.play('idle');
+		game.physics.arcade.enable(sp);
 	}, this);
 	obj['door_r'].forEach(anim_door, this);
 	obj['door_g'].forEach(anim_door, this);
