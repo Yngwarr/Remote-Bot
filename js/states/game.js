@@ -1,11 +1,17 @@
 let map, layer;
 let player;
+/* sprite groups for objects */
 let obj = {};
+/* a prompt for a command line */
 let command_label;
+let holded_cmd = '';
 
 let active_gate;
 
 const TILE_SIZE = 16;
+const GRAVITY = 300;
+const SPEED = 80;
+const JUMP_HEIGHT = 180;
 
 states['game'] = {
 	init: () => {},
@@ -25,6 +31,7 @@ states['game'] = {
 		obj['card_r'] = game.add.group();
 		obj['card_g'] = game.add.group();
 		obj['card_b'] = game.add.group();
+		obj['anomaly'] = game.add.group();
 
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -40,12 +47,16 @@ states['game'] = {
 		/* player */
 		player = game.add.sprite(32, 460, 'player');
 		game.physics.arcade.enable(player);
-		player.body.setSize(14,14,1,1);
-		player.body.gravity.y = 300;
+		//player.body.setSize(14,14,1,1);
+		// silly hack
+		player.body.setSize(2,14,7,1);
+		player.body.gravity.y = GRAVITY;
 		player.body.maxVelocity.y = 500;
 		player.body.fixedRotation = true;
 		player.direction = 1;
 		player.is_stopped = true;
+		player.is_climbing = false;
+		player.on_ladder = [false, false];
 
 		//Binding input commands and executing by player
 		init_input(game, cmd, player);
@@ -61,21 +72,55 @@ states['game'] = {
 			fill: '#9d9d9d',
 			align: 'center'
 		});
-
 	},
 	update: () => {
+		player.on_ladder[0] = player.on_ladder[1];
+		player.on_ladder[1] = false;
+
 		game.physics.arcade.collide(player, layer);
 		game.physics.arcade.overlap(player, obj['gate']);
+		game.physics.arcade.overlap(player, obj['anomaly'], (us, them) => {
+			player.on_ladder[1] = true;
+			if (!player.on_ladder[0] && player.on_ladder[1]) {
+				player.body.gravity.y = 0;
+			}
+		});
+		if (player.on_ladder[0] && !player.on_ladder[1]) {
+			player.body.gravity.y = GRAVITY;
+		}
 		
-		if (!player.is_stopped) {
-			player.body.velocity.x = player.direction < 0 ? -100 : 100;
+		if (!player.is_stopped && !player.is_climbing) {
+			player.body.velocity.x = (player.direction < 0 ? -1 : 1)*SPEED;
 		} else {
 			player.body.velocity.x = 0;
 		}
+
+		if (holded_cmd === 'up' || player.is_climbing) {
+			climb();
+		}
 	},
-	render: ()=> {
+	render: () => {
 		game.debug.body(player);
 	}
+}
+
+function climb() {
+	let ps = [
+		map.getTileWorldXY(player.body.x + player.body.halfWidth,
+			player.body.y + player.body.halfHeight).index,
+	];
+	/* 3 for a ladder */
+	if (!ps.includes(3)) {
+		if (player.is_climbing) {
+			player.body.gravity.y = GRAVITY;
+			player.is_climbing = false;
+		}
+		return;
+	}
+	player.body.gravity.y = 0;
+	player.body.velocity.y = -SPEED;
+	player.is_climbing = true;
+	holded_cmd = '';
 }
 
 function populate(map, layer) {
@@ -99,6 +144,7 @@ function populate(map, layer) {
 	map.createFromTiles(16, 0, 'door_r', layer, obj['door_r']);
 	map.createFromTiles(17, 0, 'door_g', layer, obj['door_g']);
 	map.createFromTiles(18, 0, 'door_b', layer, obj['door_b']);
+	map.createFromTiles(19, 0, 'blank', layer, obj['anomaly']);
 	/* add sprite animations */
 	let anim_door = (sp) => {
 		sp.animations.add('closed', [0], 30, true);
@@ -183,4 +229,7 @@ function populate(map, layer) {
 	obj['card_r'].forEach(anim_card, this);
 	obj['card_g'].forEach(anim_card, this);
 	obj['card_b'].forEach(anim_card, this);
+	obj['anomaly'].forEach((sp) => {
+		game.physics.arcade.enable(sp);
+	}, this);
 }

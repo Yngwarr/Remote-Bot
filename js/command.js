@@ -29,7 +29,7 @@ class CMD
 		this._put_arg = false;
     }
 
-    exec(strict) {
+    exec(strict, no_log) {
 		if (!this._fs[this._cmd]) {
 			this.clear();
 			return false;

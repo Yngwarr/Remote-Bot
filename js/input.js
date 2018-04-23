@@ -1,22 +1,29 @@
 function init_input(game, cmd, player) {
-    cmd.add('jump', ()=>{
-		player.body.velocity.y = -200;
+    cmd.add('jump', () => {
+		player.body.velocity.y = -JUMP_HEIGHT;
     });
 
-    cmd.add('turn', ()=>{
+    cmd.add('turn', () => {
         player.direction *= -1;
     });
 
-    cmd.add('stop', ()=>{
+    cmd.add('stop', () => {
         player.is_stopped = true;
     });
 
-    cmd.add('run', ()=>{
+    cmd.add('run', () => {
         player.is_stopped = false;
+		if (player.is_climbing) {
+			player.is_climbing = false;
+			player.body.gravity.y = GRAVITY;
+		}
     });
 
-    cmd.add('use', ()=>{
+    cmd.add('use', () => {
 		/* TODO */
+	});
+	cmd.add('up', () => {
+		holded_cmd = 'up';
 	});
 	cmd.add('do', (arg) => {
 		console.log(`doing ${arg}`);
