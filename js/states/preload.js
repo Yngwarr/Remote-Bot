@@ -17,6 +17,7 @@ states['preload'] = {
 		game.load.image('foe', 'img/foe.png');
 		game.load.image('spike_u', 'img/spike_u.png');
 		game.load.image('spike_l', 'img/spike_l.png');
+		game.load.image('spike_r', 'img/spike_r.png');
 	},
 	create: () => {
 		document.querySelector('canvas').oncontextmenu

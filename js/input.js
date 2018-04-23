@@ -3,15 +3,12 @@ function init_input(game, cmd, player) {
 		if (player.body.velocity.y !== 0) return;
 		player.body.velocity.y = -JUMP_HEIGHT;
     });
-
     cmd.add('turn', () => {
         player.direction *= -1;
     });
-
     cmd.add('stop', () => {
         player.is_stopped = true;
     });
-
     cmd.add('run', () => {
         player.is_stopped = false;
 		if (player.is_climbing) {
@@ -19,12 +16,11 @@ function init_input(game, cmd, player) {
 			player.body.gravity.y = GRAVITY;
 		}
     });
-
-    cmd.add('use', () => {
-		/* TODO */
-	});
 	cmd.add('up', () => {
 		cmd.hold = 'up';
+	}, false, true);
+	cmd.add('down', () => {
+		cmd.hold = 'down';
 	}, false, true);
 	cmd.add('do', (arg) => {
 		console.log(`doing ${arg}`);

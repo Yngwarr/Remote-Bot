@@ -19,6 +19,7 @@ states['game'] = {
 		/* sprite groups for objects */
 		obj['spike_u'] = game.add.group();
 		obj['spike_l'] = game.add.group();
+		obj['spike_r'] = game.add.group();
 		obj['gate'] = game.add.group();
 		obj['door_r'] = game.add.group();
 		obj['door_g'] = game.add.group();
@@ -115,21 +116,20 @@ states['game'] = {
 			obj['door_b'].forEach((door) => { door.play('open'); });
 			card.destroy();
 		});
-		game.physics.arcade.overlap(player, obj['spike_u'], (us, them) => {
-			die();
-		});
-		game.physics.arcade.overlap(player, obj['spike_l'], (us, them) => {
-			die();
-		});
+		game.physics.arcade.overlap(player, obj['spike_u'], die);
+		game.physics.arcade.overlap(player, obj['spike_l'], die);
+		game.physics.arcade.overlap(player, obj['spike_r'], die);
 		game.physics.arcade.overlap(player, obj['gate']);
 		game.physics.arcade.overlap(player, obj['anomaly'], (us, them) => {
 			player.on_ladder[1] = true;
-			if (!player.on_ladder[0] && player.on_ladder[1]) {
+			if (!player.on_ladder[0] && player.on_ladder[1]
+				&& !(cmd.hold === 'down')) {
 				player.body.gravity.y = 0;
 			}
 		});
 		if (player.on_ladder[0] && !player.on_ladder[1]) {
 			player.body.gravity.y = GRAVITY;
+			if (cmd.hold === 'down') cmd.hold = '';
 		}
 		
 		if (!player.is_stopped && !player.is_climbing) {
@@ -192,6 +192,7 @@ function populate(map, layer) {
 	/* turn tiles into sprites */
 	map.createFromTiles(2, 0, 'spike_u', layer, obj['spike_u']);
 	map.createFromTiles(21, 0, 'spike_l', layer, obj['spike_l']);
+	map.createFromTiles(22, 0, 'spike_r', layer, obj['spike_r']);
 	map.createFromTiles(4, 0, 'gate', layer, obj['gate']);
 	map.createFromTiles(13, 0, 'card_r', layer, obj['card_r']);
 	map.createFromTiles(14, 0, 'card_g', layer, obj['card_g']);
@@ -265,6 +266,10 @@ function populate(map, layer) {
 	}, this);
 	obj['spike_u'].forEach(init_spike, this);
 	obj['spike_l'].forEach(init_spike, this);
+	obj['spike_r'].forEach((sp) => {
+		game.physics.arcade.enable(sp);
+		sp.body.setCircle(5, 0, 2);
+	}, this);
 	obj['foe'].forEach((sp) => {
 		game.physics.arcade.enable(sp);
 		sp.body.immovable = true;
