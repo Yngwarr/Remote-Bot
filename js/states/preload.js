@@ -10,11 +10,11 @@ states['preload'] = {
 		game.load.spritesheet('card_r', 'img/card_r.png', TILE_SIZE, TILE_SIZE);
 		game.load.spritesheet('card_g', 'img/card_g.png', TILE_SIZE, TILE_SIZE);
 		game.load.spritesheet('card_b', 'img/card_b.png', TILE_SIZE, TILE_SIZE);
+		game.load.spritesheet('foe', 'img/foe.png', TILE_SIZE, TILE_SIZE);
 		game.load.spritesheet('grad', 'img/grad.png', 1, 24);
 		game.load.spritesheet('treasure', 'img/treasure.png',
 			TILE_SIZE, TILE_SIZE);
 		game.load.image('blank', 'img/blank.png');
-		game.load.image('foe', 'img/foe.png');
 		game.load.image('spike_u', 'img/spike_u.png');
 		game.load.image('spike_l', 'img/spike_l.png');
 		game.load.image('spike_r', 'img/spike_r.png');
@@ -23,6 +23,7 @@ states['preload'] = {
 		game.load.audio('death', 'snd/death.wav');
 		game.load.audio('jump', 'snd/jump.wav');
 		game.load.audio('pick', 'snd/pick.wav');
+		game.load.audio('run', 'snd/run.wav');
 	},
 	create: () => {
 		document.querySelector('canvas').oncontextmenu

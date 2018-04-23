@@ -40,6 +40,7 @@ states['game'] = {
 		snd['death'] = game.add.audio('death');
 		snd['jump'] = game.add.audio('jump');
 		snd['pick'] = game.add.audio('pick');
+		snd['run'] = game.add.audio('run');
 
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -54,8 +55,8 @@ states['game'] = {
 
 		/* player */
 		player = game.add.sprite(32, 32, 'player');
+		//player = game.add.sprite(724, 32, 'player');
 		game.physics.arcade.enable(player);
-		//player.body.setSize(14,14,1,1);
 		// silly hack
 		player.body.setSize(2,14,7,1);
 		player.body.gravity.y = GRAVITY;
@@ -106,16 +107,25 @@ states['game'] = {
 		game.physics.arcade.collide(player, layer);
 		game.physics.arcade.collide(player, obj['foe'], (pl, f) => {
 			die();
+			f.play('tough');
 		});
 		game.physics.arcade.overlap(obj['foe'], obj['foe_brd'], (f, b) => {
 			f.body.velocity.x *= -1;
 		});
-		game.physics.arcade.overlap(player, obj['treasure'], (pl, t) => {
-			/* TODO happy end */
-		});
 		game.physics.arcade.collide(player, obj['door_r'], null, door_collide);
 		game.physics.arcade.collide(player, obj['door_g'], null, door_collide);
 		game.physics.arcade.collide(player, obj['door_b'], null, door_collide);
+		game.physics.arcade.overlap(player, obj['treasure'], (pl, tres) => {
+			/* TODO play a tune */
+			/* TODO congrat */
+			cmd._fs.stop();
+			snd.run.stop();
+			pl.position.x = tres.position.x;
+			obj['foe'].forEach((sp) => {
+				sp.body.velocity.x = 0;
+				sp.play('final');
+			});
+		});
 		game.physics.arcade.overlap(player, obj['card_r'], (pl, card) => {
 			/* TODO add animations */
 			snd.pick.play();
@@ -174,6 +184,17 @@ states['game'] = {
 
 		ind.hold = cmd.hold;
 		ind.dir = player.direction;
+
+		if (player.body.velocity.y === 0 && player.body.velocity.x !== 0) {
+			if (!snd.run.isPlaying) {
+				if (!snd.run.paused) snd.run.play();
+				else snd.run.resume();
+			}
+		} else {
+			if (snd.run.isPlaying) {
+				snd.run.pause();
+			}
+		}
 	},
 	render: () => {
 		//game.debug.body(player);
@@ -298,6 +319,14 @@ function populate(map, layer) {
 		sp.body.setSize(8, 16, 0, 0);
 	}, this);
 	obj['foe'].forEach((sp) => {
+		let blink = _.map(Array(_.random(8, 32)), () => {return 0}).concat([1]);
+		sp.animations.add('idle', blink, 5, true);
+		sp.animations.add('tough', [2], 1, false).onComplete.add(function () {
+			this.play('idle');
+		}, sp);
+		sp.animations.add('final', [2], 1, true);
+		sp.play('idle');
+
 		game.physics.arcade.enable(sp);
 		sp.body.immovable = true;
 		sp.body.fixedRotation = true;

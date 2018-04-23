@@ -17,6 +17,9 @@ function init_input(game, cmd, player) {
         player.is_stopped = true;
     });
     cmd.add('run', () => {
+		//if (player.velocity.y === 0) {
+			//snd.run.play();
+		//}
         player.is_stopped = false;
 		if (player.is_climbing) {
 			player.is_climbing = false;
