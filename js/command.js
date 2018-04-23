@@ -10,16 +10,22 @@ class CMD
         this._fs = {};
 		/* list of parametrised commands */
 		this._pd = [];
+		/* list of commands that keep a hold */
+		this._keep = [];
 		this._hist = [];
 		this._hist_idx = 0;
 		this._hist_limit = 8;
+		this.hold = '';
     }
 
 	/* adds an action for a word */
-    add(key, f, param_required) {
+    add(key, f, param_required, keeps) {
 		this._fs[key] = f;
 		if (param_required) {
 			this._pd.push(key);
+		}
+		if (keeps) {
+			this._keep.push(key);
 		}
     }
 
@@ -29,7 +35,7 @@ class CMD
 		this._put_arg = false;
     }
 
-    exec(strict, no_log) {
+    exec(strict) {
 		if (!this._fs[this._cmd]) {
 			this.clear();
 			return false;
@@ -37,6 +43,9 @@ class CMD
 		if (this._put_arg) {
 			this._fs[this._cmd](this._arg);
 			this.hist_push();
+			if (!this._keep.includes(this._cmd)) {
+				this.hold = '';
+			}
 			this.clear();
 			return true;
 		}
@@ -48,6 +57,9 @@ class CMD
 		} 
 		this._fs[this._cmd]();
 		this.hist_push();
+		if (!this._keep.includes(this._cmd)) {
+			this.hold = '';
+		}
 		this.clear();
 		return true;
     }

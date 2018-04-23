@@ -1,5 +1,6 @@
 function init_input(game, cmd, player) {
     cmd.add('jump', () => {
+		if (player.body.velocity.y !== 0) return;
 		player.body.velocity.y = -JUMP_HEIGHT;
     });
 
@@ -23,8 +24,8 @@ function init_input(game, cmd, player) {
 		/* TODO */
 	});
 	cmd.add('up', () => {
-		holded_cmd = 'up';
-	});
+		cmd.hold = 'up';
+	}, false, true);
 	cmd.add('do', (arg) => {
 		console.log(`doing ${arg}`);
 	}, true);

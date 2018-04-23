@@ -11,7 +11,9 @@ states['preload'] = {
 		game.load.spritesheet('card_g', 'img/card_g.png', TILE_SIZE, TILE_SIZE);
 		game.load.spritesheet('card_b', 'img/card_b.png', TILE_SIZE, TILE_SIZE);
 		game.load.image('blank', 'img/blank.png');
+		game.load.image('foe', 'img/foe.png');
 		game.load.image('spike_u', 'img/spike_u.png');
+		game.load.image('spike_l', 'img/spike_l.png');
 	},
 	create: () => {
 		document.querySelector('canvas').oncontextmenu
