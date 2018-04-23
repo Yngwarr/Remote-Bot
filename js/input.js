@@ -1,41 +1,31 @@
 function init_input(game, cmd, player) {
-    // init callbacks
-    // all keys in command.js
-    cmd.add('jump', ()=>{
-        player.body.moveUp(200);
-        if (!player.is_stopped) {
-            if (player.direction < 0) {
-                player.body.velocity.x += 50;
-			} else {
-                player.body.velocity.x -= 50;
-			}
-        }
+    cmd.add('jump', () => {
+		if (player.body.velocity.y !== 0) return;
+		player.body.velocity.y = -JUMP_HEIGHT;
     });
 
-    cmd.add('turn', ()=>{
+    cmd.add('turn', () => {
         player.direction *= -1;
-        if (!player.is_stopped) {
-			if (player.direction < 0) {
-				player.body.moveLeft(100);
-			} else {
-				player.body.moveRight(100);
-			}
-		}
     });
 
-    cmd.add('stop', ()=>{
-        player.body.velocity.x = 0;
+    cmd.add('stop', () => {
         player.is_stopped = true;
     });
 
-    cmd.add('run', ()=>{
-        player.body.moveRight(100);
+    cmd.add('run', () => {
         player.is_stopped = false;
+		if (player.is_climbing) {
+			player.is_climbing = false;
+			player.body.gravity.y = GRAVITY;
+		}
     });
 
-    cmd.add('use', ()=>{
+    cmd.add('use', () => {
 		/* TODO */
 	});
+	cmd.add('up', () => {
+		cmd.hold = 'up';
+	}, false, true);
 	cmd.add('do', (arg) => {
 		console.log(`doing ${arg}`);
 	}, true);
