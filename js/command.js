@@ -36,6 +36,10 @@ class CMD
     }
 
     exec(strict) {
+		if (adv.cutscene) {
+			adv.cut_end();
+			return false;
+		}
 		adv.hide_help();
 		if (!this._fs[this._cmd]) {
 			this.clear();

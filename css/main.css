@@ -99,3 +99,9 @@ canvas {
 	width: 300px;
 	font-size: 12px;
 }
+
+#cutscene {
+	width: 800px;
+	height: 600px;
+	border: 0;
+}

@@ -1,6 +1,7 @@
 let game;
 let cmd;
 let states = {};
+let adv;
 
 function init() {
 	const config = {
@@ -11,6 +12,8 @@ function init() {
 		antialias: true,
 		multiTexture: true
 	};
+	adv = new Advice()
+	adv.cut_run();
 	game = new Phaser.Game(config);
 	cmd = new CMD();
   	for (let s in states) {

@@ -7,7 +7,6 @@ let snd = {};
 let command_label;
 let grad;
 let ind;
-let adv;
 
 let active_gate;
 
@@ -99,7 +98,6 @@ states['game'] = {
 			align: 'center'
 		});
 		ind = new Indicator();
-		adv = new Advice();
 	},
 	update: () => {
 		player.on_ladder[0] = player.on_ladder[1];
