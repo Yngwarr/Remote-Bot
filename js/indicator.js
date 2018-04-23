@@ -9,10 +9,10 @@ class Indicator {
 			font: '8px IBM',
 			fill: '#a3ce27',
 		};
-		this._hold_l = game.add.text(8, game.height - 22, 'hold: ', this.font);
-		this._dir_l = game.add.text(8, game.height - 12, 'dir:  ', this.font);
-		this._hold = game.add.text(48, game.height - 22, ' ', this.idx_font);
-		this._dir = game.add.text(48, game.height - 12, ' ', this.idx_font);
+		this._hold_l = game.add.text(8, game.height - 20, 'hold: ', this.font);
+		this._dir_l = game.add.text(8, game.height - 10, 'dir:  ', this.font);
+		this._hold = game.add.text(48, game.height - 20, ' ', this.idx_font);
+		this._dir = game.add.text(48, game.height - 10, ' ', this.idx_font);
 	}
 	set hold(val) {
 		if (val === 'down') {

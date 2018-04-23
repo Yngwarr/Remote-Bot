@@ -7,6 +7,7 @@ let snd = {};
 let command_label;
 let grad;
 let ind;
+let adv;
 
 let active_gate;
 
@@ -40,7 +41,10 @@ states['game'] = {
 		snd['death'] = game.add.audio('death');
 		snd['jump'] = game.add.audio('jump');
 		snd['pick'] = game.add.audio('pick');
-		snd['run'] = game.add.audio('run');
+		snd['run'] = game.add.audio('run', 1, true);
+
+		snd.run.play();
+		snd.run.pause();
 
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -95,6 +99,7 @@ states['game'] = {
 			align: 'center'
 		});
 		ind = new Indicator();
+		adv = new Advice();
 	},
 	update: () => {
 		player.on_ladder[0] = player.on_ladder[1];
@@ -187,8 +192,9 @@ states['game'] = {
 
 		if (player.body.velocity.y === 0 && player.body.velocity.x !== 0) {
 			if (!snd.run.isPlaying) {
-				if (!snd.run.paused) snd.run.play();
-				else snd.run.resume();
+				//if (!snd.run.paused) snd.run.play();
+				//else
+					snd.run.resume();
 			}
 		} else {
 			if (snd.run.isPlaying) {
@@ -233,6 +239,7 @@ function die() {
 	/* TODO play animation */
 	game.plugins.screenShake.shake(8);
 	snd.death.play();
+	adv.tip();
 	player.is_climbing = false;
 	player.is_stopped = true;
 	player.body.gravity.y = GRAVITY;
